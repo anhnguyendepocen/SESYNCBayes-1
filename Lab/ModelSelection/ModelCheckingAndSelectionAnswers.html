@@ -137,8 +137,8 @@ $(document).ready(function () {
 <div id="bayesian-model-checking-and-model-selection" class="section level4">
 <h4>Bayesian Model Checking and Model Selection</h4>
 </div>
-<div id="june-05-2018" class="section level4">
-<h4>June 05, 2018</h4>
+<div id="june-06-2018" class="section level4">
+<h4>June 06, 2018</h4>
 <hr />
 </div>
 <div id="table-of-contents" class="section level4">
@@ -161,7 +161,7 @@ $(document).ready(function () {
 <pre class="r"><code>y.sim[i] ~ dnorm(log_mu[i], tau)</code></pre>
 <p>in the same <code>for</code> loop.</p>
 <ol start="2" style="list-style-type: decimal">
-<li><p>Calculate a test statistic based on the real and the simulated data. The test statistic could be a mean, standard deviation, coefficient of variation, discrepancy, minimum, maximum – really any function that helps you compare the simulated and real data. I think it is wise to always include a test statistic that in someway reflects the variance because it is harder for the model to get the variance</p></li>
+<li><p>Calculate a test statistic based on the real and the simulated data. The test statistic could be a mean, standard deviation, coefficient of variation, discrepancy, minimum, maximum – really any function that helps you compare the simulated and real data. I think it is wise to always include a test statistic that in someway reflects the variance because it is harder for the model to get the variance.</p></li>
 <li><p>We are interested in calculating a Bayesian p value, the probability that the test statistic computed from the simulated data is more extreme than the test statistic computed from the real data. There is evidence of lack of fit – the model cannot give rise to the data – if the Bayesian p value is large or small. We want values between, say, .10 and .90, ideally close to .5. To obtain this the Bayesian p we use the JAGS <code>step(x)</code> function that returns 0 if x is less 0 and and 1 otherwise. So, presume our test statistic for was the standard deviation. Consider the following pseudo-code:</p></li>
 </ol>
 <pre class="r"><code>for(i in 1:length(y)){
@@ -229,7 +229,7 @@ p.sd &lt;- step(sd.sim - sd.data)</code></pre>
 <li>Compute DIC, WAIC, and Dsel.</li>
 </ol>
 <p>This will exercise your skill in summarizing jags objects using the rjags <code>summary( )</code> function. I will give you the an answer below, but not the code to produce it, which will give you a way to check your code. Note that you will need to used separate code for the intercept only model. The models with slopes can be fit using the same code with different design matrices.</p>
-<p>To check your answers, you should get very close to DIC = 527, WAIC = 533, and Dsel = 65651 for model 5. Means for the coefficients should be <span class="math inline">\(\beta_0\)</span> = 5.7, <span class="math inline">\(\beta_1\)</span>= 0.91, <span class="math inline">\(\beta_2\)</span> = 0.55.</p>
+<p>To check your answers, you should get very close to DIC = 526.6, WAIC = 532, and Dsel = 65608 for model 5. Means for the coefficients should be <span class="math inline">\(\beta_0\)</span> = 5.7, <span class="math inline">\(\beta_1\)</span>= 0.91, <span class="math inline">\(\beta_2\)</span> = 0.55.</p>
 <p>Some preliminaries:</p>
 <pre class="r"><code>####
 ####  Load Packages
@@ -271,8 +271,8 @@ cat(&quot;
 model{
   z &lt;- X %*% beta # the regression model in matrix form, returns a vector of length
   for(i in 1:n)   { 
-    # y[i] ~ dpois(lambda[i])
-    # lambda[i] &lt;- exp(z[i])
+    #y[i] ~ dpois(lambda[i])
+    #lambda[i] &lt;- exp(z[i])
     y[i] ~ dpois(lambda[i])
     lambda[i] ~ dgamma(mu[i]^2/sigma^2,mu[i]/sigma^2)
     mu[i] &lt;- exp(z[i])
@@ -324,62 +324,62 @@ M1.model &lt;- jags.model(&quot;pois.reg_nth&quot;,data=M1.list,inits=inits,n.ch
 #summary(M1.out)
 params = c(&quot;beta&quot;,&quot;lambda&quot;, &quot;deviance&quot;,&quot;log_pd&quot;,&quot;pd&quot;, &quot;y.new&quot;, &quot;p.sd&quot;, &quot;p.mean&quot;)
 M1.out &lt;- coda.samples(M1.model,variable.names=params,n.iter=10000)
-MCMCsummary(M1.out,params=c(&quot;beta&quot;, &quot;lambda&quot;, &quot;p.mean&quot;, &quot;p.sd&quot;))</code></pre>
+MCMCsummary(M1.out,params=c(&quot;beta&quot;,  &quot;lambda&quot;, &quot;p.mean&quot;, &quot;p.sd&quot;))</code></pre>
 <pre><code>##              mean    sd   2.5%    50%  97.5% Rhat
-## beta[1]      5.75  0.01   5.73   5.76   5.78 1.29
-## beta[2]      0.06  0.03   0.03   0.04   0.11 7.18
-## beta[3]      0.03  0.03   0.01   0.01   0.08 5.57
-## lambda[1]  323.06 12.03 304.59 317.23 353.56 1.69
-## lambda[2]  371.35 41.93 330.81 342.97 440.49 8.24
-## lambda[3]  317.13 10.43 293.75 316.50 342.39 1.29
-## lambda[4]  376.34 35.09 342.61 349.48 437.16 6.89
-## lambda[5]  339.06 19.94 322.52 323.09 382.78 3.67
-## lambda[6]  287.85 16.76 251.37 298.34 301.70 3.40
-## lambda[7]  298.20 11.41 269.83 303.11 317.85 1.57
-## lambda[8]  274.99 26.60 227.96 296.15 300.14 6.20
-## lambda[9]  350.86 29.63 323.20 327.53 405.40 5.78
-## lambda[10] 325.77 12.55 308.04 319.14 357.48 1.81
-## lambda[11] 304.74 16.35 268.77 316.47 317.75 3.24
-## lambda[12] 312.74 10.48 287.28 314.44 335.64 1.32
-## lambda[13] 295.98 16.73 259.50 307.93 309.54 3.41
-## lambda[14] 297.53 18.00 259.33 311.01 312.62 3.71
-## lambda[15] 329.58 13.78 313.52 321.05 363.97 2.16
-## lambda[16] 301.99 14.06 269.30 311.44 316.03 2.54
-## lambda[17] 323.73 11.97 303.73 318.44 354.14 1.58
-## lambda[18] 296.67 13.34 264.74 305.09 312.81 2.22
-## lambda[19] 302.95 10.64 277.83 305.03 326.25 1.32
-## lambda[20] 298.74 10.81 271.98 302.36 319.70 1.41
-## lambda[21] 313.95 12.37 283.26 320.62 331.73 1.87
-## lambda[22] 311.79 11.85 282.33 317.13 331.59 1.62
-## lambda[23] 314.18 10.69 287.85 316.51 336.12 1.35
-## lambda[24] 316.80 10.47 291.51 318.15 340.04 1.31
-## lambda[25] 318.19 17.62 279.65 331.83 333.68 3.33
-## lambda[26] 327.15 14.36 311.47 317.83 361.89 2.33
-## lambda[27] 318.98 12.75 287.61 326.02 336.71 1.95
-## lambda[28] 289.76 14.57 256.24 298.46 302.96 2.70
-## lambda[29] 313.75 15.19 299.16 303.69 351.04 2.49
-## lambda[30] 372.77 44.35 329.94 346.56 445.28 8.30
-## lambda[31] 314.36 11.20 293.33 311.36 342.91 1.39
-## lambda[32] 332.69 19.85 315.99 316.85 375.59 3.79
-## lambda[33] 311.84 10.52 286.64 313.19 335.43 1.30
-## lambda[34] 298.82 15.68 263.43 309.61 311.09 3.11
-## lambda[35] 331.65 15.82 318.27 321.29 368.98 2.74
-## lambda[36] 328.61 12.25 310.22 322.60 359.73 1.72
-## lambda[37] 293.50 19.69 253.30 308.81 310.66 4.28
-## lambda[38] 289.12 15.40 254.64 298.02 301.28 3.01
-## lambda[39] 313.85 10.69 291.05 312.38 340.08 1.31
-## lambda[40] 322.76 12.63 304.72 316.45 355.07 1.78
-## lambda[41] 301.56 15.25 266.69 312.75 314.00 2.88
-## lambda[42] 431.05 59.28 372.13 401.25 522.35 9.63
-## lambda[43] 311.70 12.91 280.44 319.41 328.37 2.09
-## lambda[44] 273.84 27.86 225.70 295.87 300.45 6.69
-## lambda[45] 315.34 11.02 294.06 312.18 343.02 1.40
-## lambda[46] 334.56 21.72 315.38 316.30 380.25 4.02
-## lambda[47] 280.26 28.10 231.35 304.21 306.82 6.65
-## lambda[48] 298.44 17.51 260.92 310.81 313.03 3.64
-## lambda[49] 310.12 14.44 276.07 319.86 325.18 2.50
-## p.mean       0.38  0.49   0.00   0.00   1.00 1.10
-## p.sd         0.24  0.43   0.00   0.00   1.00 1.94</code></pre>
+## beta[1]      5.75  0.01   5.72   5.75   5.78    1
+## beta[2]      0.09  0.01   0.06   0.09   0.11    1
+## beta[3]      0.06  0.01   0.03   0.06   0.08    1
+## lambda[1]  328.92 15.20 299.42 328.72 359.36    1
+## lambda[2]  411.30 17.21 378.54 411.00 446.13    1
+## lambda[3]  317.84 14.87 288.87 317.79 347.25    1
+## lambda[4]  409.48 16.59 378.16 409.14 442.95    1
+## lambda[5]  355.55 15.87 325.36 355.25 387.01    1
+## lambda[6]  274.49 14.16 247.71 274.26 302.74    1
+## lambda[7]  293.28 14.47 265.39 293.09 322.24    1
+## lambda[8]  250.02 13.70 223.53 249.85 277.11    1
+## lambda[9]  378.02 16.41 346.70 377.87 410.81    1
+## lambda[10] 332.27 15.29 302.79 332.17 362.98    1
+## lambda[11] 291.97 14.48 263.75 291.70 320.87    1
+## lambda[12] 311.20 14.85 282.79 310.97 340.80    1
+## lambda[13] 282.45 14.19 255.22 282.23 310.56    1
+## lambda[14] 282.49 14.11 255.23 282.39 310.44    1
+## lambda[15] 338.13 15.00 309.35 337.96 367.87    1
+## lambda[16] 292.10 14.26 264.78 291.89 320.47    1
+## lambda[17] 329.10 15.29 299.42 328.89 359.76    1
+## lambda[18] 288.14 14.48 260.45 287.96 317.69    1
+## lambda[19] 301.18 14.64 273.08 300.77 330.86    1
+## lambda[20] 295.88 14.83 268.00 295.49 325.85    1
+## lambda[21] 307.23 14.74 279.15 307.02 337.25    1
+## lambda[22] 306.82 14.66 278.75 306.48 336.45    1
+## lambda[23] 311.65 14.86 282.87 311.57 340.95    1
+## lambda[24] 315.57 14.78 287.05 315.47 345.16    1
+## lambda[25] 304.67 15.36 274.70 304.64 335.21    1
+## lambda[26] 336.60 15.25 307.75 336.24 367.38    1
+## lambda[27] 312.20 14.97 283.07 312.16 341.77    1
+## lambda[28] 278.99 14.19 251.86 278.85 307.53    1
+## lambda[29] 324.19 15.64 294.65 323.80 355.96    1
+## lambda[30] 415.21 17.65 381.77 414.83 450.93    1
+## lambda[31] 317.44 15.11 288.75 317.19 347.97    1
+## lambda[32] 349.17 15.74 318.94 348.89 381.04    1
+## lambda[33] 310.52 15.03 281.77 310.28 341.15    1
+## lambda[34] 286.73 14.20 259.11 286.63 314.84    1
+## lambda[35] 343.10 15.33 314.12 342.77 374.20    1
+## lambda[36] 334.53 15.17 305.35 334.18 365.13    1
+## lambda[37] 276.61 14.14 249.31 276.40 304.94    1
+## lambda[38] 277.08 14.20 249.86 276.85 305.98    1
+## lambda[39] 315.64 14.81 286.76 315.55 344.99    1
+## lambda[40] 329.44 15.37 300.18 329.10 360.46    1
+## lambda[41] 289.97 14.43 261.95 289.97 318.63    1
+## lambda[42] 488.72 20.48 449.79 488.66 529.34    1
+## lambda[43] 303.56 14.58 275.37 303.46 332.40    1
+## lambda[44] 247.80 13.62 221.10 247.62 274.95    1
+## lambda[45] 318.19 14.97 289.76 317.80 348.67    1
+## lambda[46] 352.85 16.20 322.34 352.27 385.60    1
+## lambda[47] 253.90 14.02 227.15 253.72 281.69    1
+## lambda[48] 284.48 14.23 257.07 284.24 313.02    1
+## lambda[49] 300.40 14.69 272.21 300.13 329.79    1
+## p.mean       0.50  0.50   0.00   0.00   1.00    1
+## p.sd         0.47  0.50   0.00   0.00   1.00    1</code></pre>
 <pre class="r"><code>zj=jags.samples(M1.model, variable.names=c(&quot;log_pd&quot;,&quot;pd&quot;,&quot;beta&quot;,&quot;lambda&quot;, &quot;deviance&quot;, &quot;y.new&quot;), n.iter=10000)
 zDIC=dic.samples(M1.model, n.iter=8000)</code></pre>
 <pre class="r"><code>{
@@ -441,12 +441,12 @@ Dbar = summary(zj$deviance, mean)$stat
 pD.DIC = Dbar - Dhat
 DIC = Dhat + 2*pD.DIC
 c(pD.DIC,DIC)</code></pre>
-<pre><code>## [1]  52.39029 557.66696</code></pre>
+<pre><code>## [1]  35.01153 457.09238</code></pre>
 <pre class="r"><code>#Now use built in function from dic.samples( )  above
 zDIC</code></pre>
-<pre><code>## Mean deviance:  499.3 
-## penalty 78.67 
-## Penalized deviance: 578</code></pre>
+<pre><code>## Mean deviance:  422.2 
+## penalty 34.87 
+## Penalized deviance: 457.1</code></pre>
 <pre class="r"><code>#MCMCvis
 zv= MCMCpstr(M1.out, params = params, func = mean)
 Dhat = -2*(sum(dpois(y,zv$lambda,log=TRUE))) 
@@ -454,12 +454,12 @@ Dbar = zv$deviance
 pD.DIC = Dbar - Dhat
 DIC = Dhat + 2*pD.DIC
 c(pD.DIC,DIC)</code></pre>
-<pre><code>## [1]  61.4177 583.9277</code></pre>
+<pre><code>## [1]  35.13371 457.32371</code></pre>
 <pre class="r"><code>#Now use built in function from dic.samples( )  above
 zDIC</code></pre>
-<pre><code>## Mean deviance:  499.3 
-## penalty 78.67 
-## Penalized deviance: 578</code></pre>
+<pre><code>## Mean deviance:  422.2 
+## penalty 34.87 
+## Penalized deviance: 457.1</code></pre>
 <pre class="r"><code>###
 
 ####### WAIC
@@ -468,7 +468,7 @@ lppd=-2*sum(log(summary(zj$pd,mean)$stat))
 pD.WAIC=sum((summary(zj$log_pd,sd)$stat)^2)
 WAIC=lppd +2*pD.WAIC
 c(pD.WAIC,WAIC)</code></pre>
-<pre><code>## [1] 164.6767 763.1222</code></pre>
+<pre><code>## [1]  23.30343 453.74677</code></pre>
 <pre class="r"><code>#MCMCvis
 zv.mean = MCMCpstr(M1.out, params = params, func = mean, digits = 6)
 zv.sd = MCMCpstr(M1.out, params = params, func = sd, digits = 6)
@@ -476,12 +476,12 @@ lppd = -2*sum(log(zv.mean$pd))
 pD.WAIC=sum(zv.sd$log_pd^2)
 WAIC=lppd +2*pD.WAIC
 c(pD.WAIC, WAIC)</code></pre>
-<pre><code>## [1] 236.3280 907.5944</code></pre>
+<pre><code>## [1]  23.48115 454.13638</code></pre>
 <pre class="r"><code>######Posterior predictive loss
 #JAGS object
 Dsel = sum((y-summary(zj$y.new,mean)$stat)^2) + sum((summary(zj$y.new,sd)$stat)^2)
 Dsel</code></pre>
-<pre><code>## [1] 60004.29</code></pre>
+<pre><code>## [1] 31855.26</code></pre>
 </div>
 <div id="literature-cited" class="section level4">
 <h4>Literature cited</h4>
