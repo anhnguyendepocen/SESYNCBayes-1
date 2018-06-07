@@ -167,12 +167,12 @@ $(document).ready(function () {
 y_i &amp;\sim \bigg[y_i\mid \int_{{\theta_{k-1}}}^{\theta_{k}}[z_i \mid g(\boldsymbol\beta,x_i),\sigma^2]dz_i\bigg]\\
 \boldsymbol\beta &amp;\sim \operatorname{normal}(0,0.001)\\
 \sigma &amp;\sim \operatorname{uniform}(0, 100)\\
-\boldsymbol\theta &amp;\sim \operatorname{uniform}(0,10)
+\theta_j &amp;\sim \operatorname{uniform}(0,10)
 \end{align*}\]</span>
 </div>
 <p><br></p>
 <ol start="3" style="list-style-type: decimal">
-<li>Set your seed to 23 and simulate the data using the following parameters: <span class="math inline">\(\beta_1=5\)</span>, <span class="math inline">\(\beta_2=-1\)</span>. Simulate 20 data points per year, for each of the 6 years. <br></li>
+<li>Set your seed to 23 and simulate the data using the following parameters: <span class="math inline">\(\beta_1=5\)</span>, <span class="math inline">\(\beta_2=-1\)</span>, <span class="math inline">\(\sigma=3\)</span>. Simulate 20 data points per year, for each of the 6 years. <br></li>
 </ol>
 <div class="hider">
 <pre class="r"><code>library(rjags)
