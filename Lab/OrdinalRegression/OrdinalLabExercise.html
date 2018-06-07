@@ -143,9 +143,6 @@ $(document).ready(function () {
 <hr />
 <p><br></p>
 <p>The purpose of this lab is to get you started using Bayesian models to predict ordinal quantities. Ordinal quantities can be scaled (e.g. cover classes, fish size) or unscaled (e.g. Likert). Today, we will just do the unscaled case. No data will be provided for this lab. Instead, you will simulate data with given parameters, code the model in JAGS, and recover the original parameters.</p>
-</div>
-<div id="unscaled-case" class="section level4">
-<h4>Unscaled Case</h4>
 <p>You are interested in modeling the relationship between opinions about the acceptability of fracking over a 6-year timeframe. You conduct a panel-based online survey of New Yorkers once a year for 6 years.</p>
 <p>Fracking acceptability, <span class="math inline">\(y_i\)</span>, is measured on a 5-point scale, where 1 equals <em>completely acceptable</em> and 5 equals <em>completely unacceptable</em>.</p>
 <p>In this exercise you will fit a ordinal regression model, predicting fracking acceptability, a five-point ordinal categorical variable. The predictor variable is year, <span class="math inline">\(x_i\)</span>. To deal with issues of identifiability, plan to fix the lower- and upper-most cut points (<span class="math inline">\(\theta_1 = 1.5\)</span> and <span class="math inline">\(\theta_4 = 4.5\)</span>).</p>
